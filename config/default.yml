@@ -6,6 +6,7 @@ db:
   port: 5432
   # database: 'treg'
   database: 'dd2b2smdgcp914'
+  synchronize: true
 
 jwt:
   expiresIn: 86400

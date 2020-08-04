@@ -3,6 +3,9 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 const dbConfig = config.get('db');
 
+console.log(`synchronize: ${process.env.TYPEORM_SYNC || dbConfig.synchronize}`);
+console.log(JSON.stringify(dbConfig));
+
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
   host: process.env.RDS_HOSTNAME || dbConfig.host,
