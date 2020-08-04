@@ -7,53 +7,53 @@ import { ListingStatus } from "./listing-status.enum";
 import { User } from "src/auth/user.entity";
 
 @EntityRepository(Listing)
-export class ProductRepository extends Repository<Listing> {
+export class ListingRepository extends Repository<Listing> {
   
-  private logger = new Logger('ProductRepository');
+  private logger = new Logger('ListingRepository');
 
-  public async getProducts(
+  public async getListings(
     filterDto: GetListingsFilterDto,
     user: User
   ): Promise<Listing[]> {
     const { status, search } = filterDto;
-    const query = this.createQueryBuilder('product');
+    const query = this.createQueryBuilder('listing');
 
-    query.where('product.userId = :userId', { userId: user.id });
-    if (status) query.andWhere('product.status = :status', { status });
-    if (search) query.andWhere('(product.title LIKE :search OR product.description LIKE :search)', { search: `%${search}$%`});
+    query.where('listing.userId = :userId', { userId: user.id });
+    if (status) query.andWhere('listing.status = :status', { status });
+    if (search) query.andWhere('(listing.title LIKE :search OR listing.description LIKE :search)', { search: `%${search}$%`});
 
     try {
-      const products = await query.getMany();
-      return products;
+      const listings = await query.getMany();
+      return listings;
     } catch (error) {
       this.logger.error(`Failed to get tasks for user "${user.username}". Filters: ${JSON.stringify(filterDto)}`, error.stack);
       throw new InternalServerErrorException();
     }
   }
 
-  public async createProduct(
+  public async createListing(
     createListingDto: CreateListingDto,
     user: User
   ): Promise<Listing> {
     const { title, description, price, quantity } = createListingDto;
 
-    const product = new Listing();
-    product.title = title;
-    product.description = description;
-    product.price = price;
-    product.quantity = quantity;
-    product.status = ListingStatus.AVAILABLE;
-    product.user = user;
+    const listing = new Listing();
+    listing.title = title;
+    listing.description = description;
+    listing.price = price;
+    listing.quantity = quantity;
+    listing.status = ListingStatus.AVAILABLE;
+    listing.user = user;
 
     try {
-      await product.save();
+      await listing.save();
     } catch (error) {
-      this.logger.error(`Failed to create a product for user "${user.username}". Data: ${JSON.stringify(createListingDto)}`, error.stack);
+      this.logger.error(`Failed to create a listing for user "${user.username}". Data: ${JSON.stringify(createListingDto)}`, error.stack);
       throw new InternalServerErrorException();
     }
 
-    delete product.user;
+    delete listing.user;
 
-    return product;
+    return listing;
   }
 }

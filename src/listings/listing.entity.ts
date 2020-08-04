@@ -2,14 +2,14 @@ import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne } from 't
 import { ListingStatus } from './listing-status.enum';
 import { User } from 'src/auth/user.entity';
 
-type Image = {
-  fileName: string;
-}
+// type Image = {
+//   fileName: string;
+// }
 
-type Location = {
-  latitude: number;
-  longitude: number; 
-}
+// type Location = {
+//   latitude: number;
+//   longitude: number; 
+// }
 
 @Entity()
 export class Listing extends BaseEntity {
@@ -23,8 +23,8 @@ export class Listing extends BaseEntity {
   @Column()
   description: string;
   
-  @Column()
-  images: Image[];
+  // @Column()
+  // images: Image[];
 
   @Column()
   price: number;
@@ -35,7 +35,7 @@ export class Listing extends BaseEntity {
   @Column()
   status: ListingStatus;
 
-  @ManyToOne(type => User, user => user.products, { eager: false })
+  @ManyToOne(type => User, user => user.listings, { eager: false })
   user: User;
 
   @Column()
@@ -44,6 +44,6 @@ export class Listing extends BaseEntity {
   @Column()
   categoryId: number;
 
-  @Column()
-  location: Location;
+  // @Column()
+  // location: Location;
 }

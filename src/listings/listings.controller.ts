@@ -15,13 +15,13 @@ import {
   UseInterceptors, 
   UploadedFiles
 } from '@nestjs/common';
-import { ProductsService } from './listings.service';
+import { ListingsService } from './listings.service';
 import { GetListingsFilterDto } from './dto/get-listings-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Listing } from './listing.entity';
 import { CreateListingDto } from './dto/create-listing.dto';
-import { ProductStatusValidationPipe } from './pipes/product-status-validation.pipe';
+import { ListingStatusValidationPipe } from './pipes/listing-status-validation.pipe';
 import { ListingStatus } from './listing-status.enum';
 import { User } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
@@ -30,19 +30,19 @@ import { ApiMultiFile } from './decorators/api-multi-file.decorator';
 
 @Controller('listings')
 @UseGuards(AuthGuard())
-export class ProductsController {
+export class ListingsController {
 
-  private logger = new Logger('ProductsController');
+  private logger = new Logger('ListingsController');
 
-  constructor(private productsService: ProductsService) {}
+  constructor(private listingsService: ListingsService) {}
 
   @Get()
-  public getProducts(
+  public getListings(
     @Query(ValidationPipe) filterDto: GetListingsFilterDto,
     @GetUser() user: User
   ) {
     this.logger.verbose(`User "${user.username}" retrieving all tasks. Filters: ${JSON.stringify(filterDto)}`);
-    return this.productsService.getProducts(filterDto, user);
+    return this.listingsService.getListings(filterDto, user);
   }
 
   @Get('/:id')
@@ -50,15 +50,15 @@ export class ProductsController {
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User
   ): Promise<Listing> {
-    return this.productsService.getProductById(id, user);
+    return this.listingsService.getListingById(id, user);
   }
 
   @Delete('/:id')
-  deleteProduct(
+  deleteListing(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User
   ): Promise<void> {
-    return this.productsService.deleteProduct(id, user);
+    return this.listingsService.deleteListing(id, user);
   }
 
   @Post()
@@ -67,21 +67,21 @@ export class ProductsController {
   @ApiMultiFile()
   // @UseInterceptors(FilesInterceptor('files'))
   @UseInterceptors(FilesInterceptor('files[]'))
-  public createProduct(
+  public createListing(
     @UploadedFiles() files: Express.Multer.File,
-    @Body() createProductDto: CreateListingDto,
+    @Body() createListingDto: CreateListingDto,
     @GetUser() user: User 
   ): Promise<Listing> {
-    this.logger.verbose(`User "${user.username}" creating a new product. Data: ${JSON.stringify(createProductDto)}`);
-    return this.productsService.createProduct(createProductDto, user);
+    this.logger.verbose(`User "${user.username}" creating a new listing. Data: ${JSON.stringify(createListingDto)}`);
+    return this.listingsService.createListing(createListingDto, user);
   }
 
   @Patch('/:id/status')
-  public updateProductStatus(
+  public updateListingStatus(
     @Param('id', ParseIntPipe) id: number,
-    @Body('status', ProductStatusValidationPipe) status: ListingStatus,
+    @Body('status', ListingStatusValidationPipe) status: ListingStatus,
     @GetUser() user: User
   ): Promise<Listing> {
-    return this.productsService.updateProductStatus(id, status, user);
+    return this.listingsService.updateListingStatus(id, status, user);
   }
 }

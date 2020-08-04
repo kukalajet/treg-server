@@ -1,7 +1,7 @@
 import { PipeTransform, BadRequestException } from "@nestjs/common";
 import { ListingStatus } from "../listing-status.enum";
 
-export class ProductStatusValidationPipe implements PipeTransform {
+export class ListingStatusValidationPipe implements PipeTransform {
   
   readonly allowedStatuses = [
     ListingStatus.AVAILABLE,
