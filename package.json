@@ -45,9 +45,8 @@
     "swagger-ui-express": "^4.1.4",
     "ts-node": "8.1.0",
     "typeorm": "^0.2.18",
-    "typescript": "3.9.3"
-  },
-  "devDependencies": {
+    "typescript": "3.9.3",
+
     "@nestjs/cli": "^7.1.1",
     "@nestjs/testing": "^7.1.1",
     "@types/jest": "^25.2.3",
@@ -62,6 +61,7 @@
     "tslint": "6.1.2",
     "wait-on": "^5.0.0"
   },
+  "devDependencies": {},
   "jest": {
     "moduleFileExtensions": [
       "js",
