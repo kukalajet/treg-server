@@ -2,4 +2,10 @@ server:
   origin: http://nestjs-task-management-frontend-km.s3-website.eu-central-1.amazonaws.com
 
 db:
+  host: 'ec2-52-1-95-247.compute-1.amazonaws.com'
+  username: 'iwmxxbqwivsvok'
+  password: '26c87da7ad2b632864ef69b3246c50f5d5e9f565a2e0d4a344d321a042bfee3b'
   synchonize: false
+
+jwt:
+  secret: 'topSecret51'
