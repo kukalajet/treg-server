@@ -9,7 +9,8 @@ import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ListingRepository]),
-    MulterModule.register({ dest: '../uploads' }),
+    // MulterModule.register({ dest: '../uploads' }),
+    MulterModule.register({ dest: './tmp/uploads' }),
     AuthModule
   ],
   controllers: [ListingsController],
