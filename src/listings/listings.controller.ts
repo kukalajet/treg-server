@@ -1,12 +1,28 @@
-import { Controller, Logger, Get, Query, ValidationPipe, UseGuards, Param, ParseIntPipe, Post, UsePipes, Body, Patch, Delete, UseInterceptors, UploadedFile, UploadedFiles } from '@nestjs/common';
+import { 
+  Controller, 
+  Logger, 
+  Get, 
+  Query, 
+  ValidationPipe, 
+  UseGuards, 
+  Param, 
+  ParseIntPipe, 
+  Post, 
+  UsePipes, 
+  Body, 
+  Patch, 
+  Delete, 
+  UseInterceptors, 
+  UploadedFiles
+} from '@nestjs/common';
 import { ProductsService } from './listings.service';
-import { GetProductsFilterDto } from './dto/get-products-filter.dto';
+import { GetListingsFilterDto } from './dto/get-listings-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { Product } from './listing.entity';
-import { CreateProductDto } from './dto/create-product.dto';
+import { Listing } from './listing.entity';
+import { CreateListingDto } from './dto/create-listing.dto';
 import { ProductStatusValidationPipe } from './pipes/product-status-validation.pipe';
-import { ProductStatus } from './listing-status.enum';
+import { ListingStatus } from './listing-status.enum';
 import { User } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { ApiConsumes } from '@nestjs/swagger';
@@ -22,7 +38,7 @@ export class ProductsController {
 
   @Get()
   public getProducts(
-    @Query(ValidationPipe) filterDto: GetProductsFilterDto,
+    @Query(ValidationPipe) filterDto: GetListingsFilterDto,
     @GetUser() user: User
   ) {
     this.logger.verbose(`User "${user.username}" retrieving all tasks. Filters: ${JSON.stringify(filterDto)}`);
@@ -33,7 +49,7 @@ export class ProductsController {
   public getTaskById(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User
-  ): Promise<Product> {
+  ): Promise<Listing> {
     return this.productsService.getProductById(id, user);
   }
 
@@ -53,9 +69,9 @@ export class ProductsController {
   @UseInterceptors(FilesInterceptor('files[]'))
   public createProduct(
     @UploadedFiles() files: Express.Multer.File,
-    @Body() createProductDto: CreateProductDto,
+    @Body() createProductDto: CreateListingDto,
     @GetUser() user: User 
-  ): Promise<Product> {
+  ): Promise<Listing> {
     this.logger.verbose(`User "${user.username}" creating a new product. Data: ${JSON.stringify(createProductDto)}`);
     return this.productsService.createProduct(createProductDto, user);
   }
@@ -63,9 +79,9 @@ export class ProductsController {
   @Patch('/:id/status')
   public updateProductStatus(
     @Param('id', ParseIntPipe) id: number,
-    @Body('status', ProductStatusValidationPipe) status: ProductStatus,
+    @Body('status', ProductStatusValidationPipe) status: ListingStatus,
     @GetUser() user: User
-  ): Promise<Product> {
+  ): Promise<Listing> {
     return this.productsService.updateProductStatus(id, status, user);
   }
 }

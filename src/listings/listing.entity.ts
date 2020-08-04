@@ -1,9 +1,18 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
-import { ProductStatus } from './listing-status.enum';
+import { ListingStatus } from './listing-status.enum';
 import { User } from 'src/auth/user.entity';
 
+type Image = {
+  fileName: string;
+}
+
+type Location = {
+  latitude: number;
+  longitude: number; 
+}
+
 @Entity()
-export class Product extends BaseEntity {
+export class Listing extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -15,11 +24,26 @@ export class Product extends BaseEntity {
   description: string;
   
   @Column()
-  status: ProductStatus
+  images: Image[];
+
+  @Column()
+  price: number;
+
+  @Column()
+  quantity: number;
+
+  @Column()
+  status: ListingStatus;
 
   @ManyToOne(type => User, user => user.products, { eager: false })
-  user: User
+  user: User;
 
   @Column()
   userId: number;
+
+  @Column()
+  categoryId: number;
+
+  @Column()
+  location: Location;
 }

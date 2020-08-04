@@ -1,11 +1,11 @@
 import { PipeTransform, BadRequestException } from "@nestjs/common";
-import { ProductStatus } from "../listing-status.enum";
+import { ListingStatus } from "../listing-status.enum";
 
 export class ProductStatusValidationPipe implements PipeTransform {
   
   readonly allowedStatuses = [
-    ProductStatus.AVAILABLE,
-    ProductStatus.SOLD
+    ListingStatus.AVAILABLE,
+    ListingStatus.SOLD
   ];
 
   transform(value: any) {

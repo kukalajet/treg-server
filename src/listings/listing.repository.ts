@@ -1,20 +1,20 @@
 import { Repository, EntityRepository } from "typeorm";
-import { Product } from "./listing.entity";
-import { GetProductsFilterDto } from "./dto/get-products-filter.dto";
+import { Listing } from "./listing.entity";
+import { GetListingsFilterDto } from "./dto/get-listings-filter.dto";
 import { InternalServerErrorException, Logger } from "@nestjs/common";
-import { CreateProductDto } from "./dto/create-product.dto";
-import { ProductStatus } from "./listing-status.enum";
+import { CreateListingDto } from "./dto/create-listing.dto";
+import { ListingStatus } from "./listing-status.enum";
 import { User } from "src/auth/user.entity";
 
-@EntityRepository(Product)
-export class ProductRepository extends Repository<Product> {
+@EntityRepository(Listing)
+export class ProductRepository extends Repository<Listing> {
   
   private logger = new Logger('ProductRepository');
 
   public async getProducts(
-    filterDto: GetProductsFilterDto,
+    filterDto: GetListingsFilterDto,
     user: User
-  ): Promise<Product[]> {
+  ): Promise<Listing[]> {
     const { status, search } = filterDto;
     const query = this.createQueryBuilder('product');
 
@@ -32,21 +32,23 @@ export class ProductRepository extends Repository<Product> {
   }
 
   public async createProduct(
-    createProductDto: CreateProductDto,
+    createListingDto: CreateListingDto,
     user: User
-  ): Promise<Product> {
-    const { title, description } = createProductDto;
+  ): Promise<Listing> {
+    const { title, description, price, quantity } = createListingDto;
 
-    const product = new Product();
+    const product = new Listing();
     product.title = title;
     product.description = description;
-    product.status = ProductStatus.AVAILABLE;
+    product.price = price;
+    product.quantity = quantity;
+    product.status = ListingStatus.AVAILABLE;
     product.user = user;
 
     try {
       await product.save();
     } catch (error) {
-      this.logger.error(`Failed to create a product for user "${user.username}". Data: ${JSON.stringify(createProductDto)}`, error.stack);
+      this.logger.error(`Failed to create a product for user "${user.username}". Data: ${JSON.stringify(createListingDto)}`, error.stack);
       throw new InternalServerErrorException();
     }
 

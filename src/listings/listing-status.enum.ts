@@ -1,4 +1,4 @@
-export enum ProductStatus {
+export enum ListingStatus {
   'AVAILABLE' = 'AVAILABLE',
   'SOLD' = 'SOLD'
 }

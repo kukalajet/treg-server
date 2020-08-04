@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { GetProductsFilterDto } from './dto/get-products-filter.dto';
+import { GetListingsFilterDto } from './dto/get-listings-filter.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from './listing.entity';
+import { Listing } from './listing.entity';
 import { ProductRepository } from './listing.repository';
-import { CreateProductDto } from './dto/create-product.dto';
-import { ProductStatus } from './listing-status.enum';
+import { CreateListingDto } from './dto/create-listing.dto';
+import { ListingStatus } from './listing-status.enum';
 import { User } from 'src/auth/user.entity';
 
 @Injectable()
@@ -16,16 +16,16 @@ export class ProductsService {
   ) {}
 
   public async getProducts(
-    filterDto: GetProductsFilterDto,
+    filterDto: GetListingsFilterDto,
     user: User
-  ): Promise<Product[]> {
+  ): Promise<Listing[]> {
     return this.productRepository.getProducts(filterDto, user);
   }
 
   public async getProductById(
     id: number,
     user: User
-  ): Promise<Product> {
+  ): Promise<Listing> {
     const found = await this.productRepository.findOne({ where: { id, userId: user.id } });
     if (!found) throw new NotFoundException(`Task with ID "${id}" not found`);
 
@@ -41,17 +41,17 @@ export class ProductsService {
   }
 
   public async createProduct(
-    createProductDto: CreateProductDto,
+    createProductDto: CreateListingDto,
     user: User
-  ): Promise<Product> {
+  ): Promise<Listing> {
     return this.productRepository.createProduct(createProductDto, user);
   }
 
   public async updateProductStatus(
     id: number,
-    status: ProductStatus,
+    status: ListingStatus,
     user: User
-  ): Promise<Product> {
+  ): Promise<Listing> {
     const product = await this.getProductById(id, user);
     product.status = status;
     await product.save();
