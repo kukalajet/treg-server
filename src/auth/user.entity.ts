@@ -3,14 +3,17 @@ import * as bcrypt from 'bcryptjs';
 import { Listing } from "src/listings/listing.entity";
 
 @Entity()
-@Unique(['username'])
+@Unique(['email'])
 export class User extends BaseEntity {
   
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  username: string;
+  name: string;
+
+  @Column()
+  email: string;
 
   @Column()
   password: string;

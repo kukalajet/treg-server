@@ -19,7 +19,7 @@ export class UsersController {
     @GetUser() user: User
   ) {
     console.log(filterDto);
-    this.logger.verbose(`User "${user.username}" retrieving all users. Filters: ${JSON.stringify(filterDto)}`);
+    this.logger.verbose(`User "${user.name}" retrieving all users. Filters: ${JSON.stringify(filterDto)}`);
     return this.usersService.getUsers(filterDto, user);
   }
 
@@ -28,7 +28,7 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User
   ) {
-    this.logger.verbose(`User "${user.username}" retrieving user "${id}"`);
+    this.logger.verbose(`User "${user.name}" retrieving user "${id}"`);
     return this.usersService.getUserById(id, user);
   }
 }

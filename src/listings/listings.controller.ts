@@ -41,7 +41,7 @@ export class ListingsController {
     @Query(ValidationPipe) filterDto: GetListingsFilterDto,
     @GetUser() user: User
   ) {
-    this.logger.verbose(`User "${user.username}" retrieving all tasks. Filters: ${JSON.stringify(filterDto)}`);
+    this.logger.verbose(`User "${user.name}" retrieving all tasks. Filters: ${JSON.stringify(filterDto)}`);
     return this.listingsService.getListings(filterDto, user);
   }
 
@@ -72,7 +72,7 @@ export class ListingsController {
     @Body() createListingDto: CreateListingDto,
     @GetUser() user: User 
   ): Promise<Listing> {
-    this.logger.verbose(`User "${user.username}" creating a new listing. Data: ${JSON.stringify(createListingDto)}`);
+    this.logger.verbose(`User "${user.name}" creating a new listing. Data: ${JSON.stringify(createListingDto)}`);
     return this.listingsService.createListing(createListingDto, user);
   }
 

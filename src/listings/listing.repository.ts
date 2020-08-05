@@ -26,7 +26,7 @@ export class ListingRepository extends Repository<Listing> {
       const listings = await query.getMany();
       return listings;
     } catch (error) {
-      this.logger.error(`Failed to get tasks for user "${user.username}". Filters: ${JSON.stringify(filterDto)}`, error.stack);
+      this.logger.error(`Failed to get tasks for user "${user.name}". Filters: ${JSON.stringify(filterDto)}`, error.stack);
       throw new InternalServerErrorException();
     }
   }
@@ -48,7 +48,7 @@ export class ListingRepository extends Repository<Listing> {
     try {
       await listing.save();
     } catch (error) {
-      this.logger.error(`Failed to create a listing for user "${user.username}". Data: ${JSON.stringify(createListingDto)}`, error.stack);
+      this.logger.error(`Failed to create a listing for user "${user.name}". Data: ${JSON.stringify(createListingDto)}`, error.stack);
       throw new InternalServerErrorException();
     }
 
